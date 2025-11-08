@@ -3,18 +3,31 @@
 ## Prerequisites
 
 1. A Sentry account with Session Replay enabled
-2. Node.js 18+ installed
+2. Bun runtime installed (via mise)
 3. Access to create Sentry auth tokens
 
 ## Setup (5 minutes)
 
-### 1. Install Dependencies
+### 1. Install Bun via mise
 
 ```bash
-npm install
+# Install mise if not already installed
+curl https://mise.run | sh
+
+# Install Bun using mise
+mise install
+
+# Or install Bun directly
+curl -fsSL https://bun.sh/install | bash
 ```
 
-### 2. Get Sentry Credentials
+### 2. Install Dependencies
+
+```bash
+bun install
+```
+
+### 3. Get Sentry Credentials
 
 **Auth Token:**
 1. Go to https://sentry.io/settings/account/api/auth-tokens/
@@ -29,7 +42,7 @@ npm install
 2. Look at the URL: `https://sentry.io/organizations/{your-org-slug}/`
 3. Copy the org slug from the URL
 
-### 3. Configure Environment
+### 4. Configure Environment
 
 ```bash
 cp .env.example .env
@@ -54,7 +67,7 @@ export SENTRY_ORG_SLUG='your-org-name'
 ### Fetch Replays
 
 ```bash
-npm run client
+bun run client
 ```
 
 This will:
@@ -66,7 +79,7 @@ This will:
 ### Analyze Replays
 
 ```bash
-npm run analyzer
+bun run analyzer
 ```
 
 This demonstrates:
@@ -78,7 +91,7 @@ This demonstrates:
 ### Run Complete Example
 
 ```bash
-npm run example
+bun run example
 ```
 
 This runs the full workflow:
@@ -94,7 +107,7 @@ This runs the full workflow:
 
 ### Generated Test Files
 
-After running `example.py`, you'll find:
+After running `bun run example`, you'll find:
 
 ```
 generated-tests/
@@ -139,14 +152,14 @@ test('replay-abc12345', async ({ page }) => {
 
 2. Run tests:
    ```bash
-   npm test
+   bun test:playwright
    # or
-   npx playwright test generated-tests/
+   bunx playwright test generated-tests/
    ```
 
 3. View report:
    ```bash
-   npx playwright show-report
+   bunx playwright show-report
    ```
 
 ### To Enhance the Tests

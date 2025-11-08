@@ -29,10 +29,11 @@ Each folder contains a focused research question, implementation experiments, an
 **Quick Start:**
 ```bash
 cd sentry-replays-meticulous
-npm install
+mise install    # Install Bun via mise
+bun install     # Install dependencies
 export SENTRY_AUTH_TOKEN='your-token'
 export SENTRY_ORG_SLUG='your-org'
-npm run example
+bun run example
 ```
 
 See the [project README](./sentry-replays-meticulous/README.md) for details.
@@ -68,9 +69,18 @@ Each research project includes:
 ### Technology Stack
 
 - **TypeScript** - All code is written in TypeScript for type safety
-- **Node.js** - Runtime environment
-- **npm** - Package management
+- **Bun** - Ultra-fast JavaScript runtime and package manager
+- **mise** - Development environment manager for Bun installation
 - **Modern ES2020+** - Latest JavaScript features
+
+### Runtime: Bun
+
+All projects use **Bun** as the JavaScript runtime:
+- ⚡ **Fast** - Significantly faster than Node.js
+- 🔄 **Native TypeScript** - Runs .ts files directly, no transpilation needed
+- 📦 **Built-in Package Manager** - Fast dependency installation
+- 🧪 **Built-in Test Runner** - No need for separate testing libraries
+- 🛠️ **All-in-one** - Bundler, transpiler, and runtime in one tool
 
 ## Contributing
 

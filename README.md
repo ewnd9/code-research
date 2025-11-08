@@ -4,6 +4,8 @@ Async code research experiments following [Simon Willison's approach](https://si
 
 Each folder contains a focused research question, implementation experiments, and findings.
 
+**Language:** All projects are implemented in **TypeScript** for type safety and modern development practices.
+
 ## Projects
 
 ### [sentry-replays-meticulous](./sentry-replays-meticulous/)
@@ -18,18 +20,19 @@ Each folder contains a focused research question, implementation experiments, an
 - Estimated MVP: 3-4 months with 1-2 engineers
 
 **Components:**
-- Sentry API client for fetching replays
+- Sentry API client for fetching replays (TypeScript + axios)
 - Replay analyzer for extracting test patterns
 - Playwright test generator
 - Coverage analysis tools
+- Full TypeScript type safety
 
 **Quick Start:**
 ```bash
 cd sentry-replays-meticulous
-pip install -r requirements.txt
+npm install
 export SENTRY_AUTH_TOKEN='your-token'
 export SENTRY_ORG_SLUG='your-org'
-python example.py
+npm run example
 ```
 
 See the [project README](./sentry-replays-meticulous/README.md) for details.
@@ -56,9 +59,18 @@ Benefits:
 Each research project includes:
 
 - **README.md** - Research question, background, approach
-- **Code** - Working proof-of-concept implementation
+- **TypeScript Code** - Working proof-of-concept implementation
 - **FINDINGS.md** - Detailed results, limitations, next steps
 - **QUICKSTART.md** - How to run and use the code
+- **package.json** - Dependencies and npm scripts
+- **tsconfig.json** - TypeScript configuration
+
+### Technology Stack
+
+- **TypeScript** - All code is written in TypeScript for type safety
+- **Node.js** - Runtime environment
+- **npm** - Package management
+- **Modern ES2020+** - Latest JavaScript features
 
 ## Contributing
 

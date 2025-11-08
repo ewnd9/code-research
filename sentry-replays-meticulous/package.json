@@ -1,0 +1,36 @@
+{
+  "name": "sentry-replays-meticulous",
+  "version": "0.1.0",
+  "description": "Build a meticulous.ai-style automated testing system using Sentry's session replay data",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/example.ts",
+    "example": "ts-node src/example.ts",
+    "client": "ts-node src/sentry-client.ts",
+    "analyzer": "ts-node src/replay-analyzer.ts",
+    "test": "playwright test",
+    "clean": "rm -rf dist generated-tests"
+  },
+  "keywords": [
+    "sentry",
+    "replay",
+    "testing",
+    "automation",
+    "playwright",
+    "e2e"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

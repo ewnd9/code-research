@@ -8,24 +8,27 @@
 
 ## Technical Architecture
 
-### Components Built
+### Components Built (TypeScript)
 
-1. **Sentry API Client** (`sentry_client.py`)
-   - Fetches replay sessions via REST API
+1. **Sentry API Client** (`src/sentry-client.ts`)
+   - Fetches replay sessions via REST API using axios
    - Supports filtering by project, environment, errors
    - Handles pagination automatically
    - Authenticates with bearer tokens
+   - Fully typed with TypeScript interfaces
 
-2. **Replay Analyzer** (`replay_analyzer.py`)
+2. **Replay Analyzer** (`src/replay-analyzer.ts`)
    - Parses replay data into actionable test cases
    - Extracts user actions, network requests, errors
    - Generates Playwright test scripts
    - Provides coverage analysis
    - Selects most valuable sessions for testing
+   - Type-safe session and action models
 
-3. **Integration Example** (`example.py`)
+3. **Integration Example** (`src/example.ts`)
    - End-to-end workflow demonstration
    - Fetches → Analyzes → Generates → Exports
+   - Full error handling and user guidance
 
 ## What Works
 
@@ -98,11 +101,12 @@
 
 ### What This PoC Demonstrates
 
-✅ **API Integration**: Successfully connects to Sentry and fetches replays
+✅ **API Integration**: Successfully connects to Sentry and fetches replays (TypeScript + axios)
 ✅ **Data Filtering**: Can query by errors, projects, time ranges
-✅ **Analysis Pipeline**: Processes replay data into structured format
+✅ **Analysis Pipeline**: Processes replay data into structured format with type safety
 ✅ **Test Scaffolding**: Generates runnable Playwright test files
 ✅ **Coverage Metrics**: Analyzes test coverage across sessions
+✅ **Type Safety**: Full TypeScript implementation with interfaces and proper typing
 
 ### What's Missing for Production
 

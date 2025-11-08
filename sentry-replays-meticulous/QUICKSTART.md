@@ -3,7 +3,7 @@
 ## Prerequisites
 
 1. A Sentry account with Session Replay enabled
-2. Python 3.8+ installed
+2. Node.js 18+ installed
 3. Access to create Sentry auth tokens
 
 ## Setup (5 minutes)
@@ -11,7 +11,7 @@
 ### 1. Install Dependencies
 
 ```bash
-pip install -r requirements.txt
+npm install
 ```
 
 ### 2. Get Sentry Credentials
@@ -54,7 +54,7 @@ export SENTRY_ORG_SLUG='your-org-name'
 ### Fetch Replays
 
 ```bash
-python sentry_client.py
+npm run client
 ```
 
 This will:
@@ -66,7 +66,7 @@ This will:
 ### Analyze Replays
 
 ```bash
-python replay_analyzer.py
+npm run analyzer
 ```
 
 This demonstrates:
@@ -78,7 +78,7 @@ This demonstrates:
 ### Run Complete Example
 
 ```bash
-python example.py
+npm run example
 ```
 
 This runs the full workflow:
@@ -135,13 +135,12 @@ test('replay-abc12345', async ({ page }) => {
 
 ### To Run Generated Tests
 
-1. Install Playwright:
-   ```bash
-   npm install -D @playwright/test
-   ```
+1. Playwright is already installed as a dev dependency
 
 2. Run tests:
    ```bash
+   npm test
+   # or
    npx playwright test generated-tests/
    ```
 
@@ -196,38 +195,39 @@ See `FINDINGS.md` for detailed implementation roadmap.
 ## Architecture
 
 ```
-┌──────────────┐
-│    Sentry    │  Session Replay captures user sessions
-└──────┬───────┘
-       │ API
-       ▼
-┌──────────────┐
-│ sentry_client│  Fetches replay data via REST API
-└──────┬───────┘
-       │ JSON
-       ▼
-┌──────────────┐
-│replay_analyzer│ Parses sessions, extracts patterns
-└──────┬───────┘
-       │ ReplaySession objects
-       ▼
-┌──────────────┐
-│Test Generator│  Creates Playwright test scripts
-└──────┬───────┘
-       │ .spec.ts files
-       ▼
-┌──────────────┐
-│  Playwright  │  Runs tests, captures screenshots
-└──────────────┘
+┌──────────────────┐
+│      Sentry      │  Session Replay captures user sessions
+└────────┬─────────┘
+         │ API (axios)
+         ▼
+┌──────────────────┐
+│ sentry-client.ts │  Fetches replay data via REST API
+└────────┬─────────┘
+         │ TypeScript interfaces
+         ▼
+┌──────────────────┐
+│replay-analyzer.ts│ Parses sessions, extracts patterns
+└────────┬─────────┘
+         │ ReplaySession objects
+         ▼
+┌──────────────────┐
+│ Test Generator   │  Creates Playwright test scripts
+└────────┬─────────┘
+         │ .spec.ts files
+         ▼
+┌──────────────────┐
+│   Playwright     │  Runs tests, captures screenshots
+└──────────────────┘
 ```
 
 ## Learn More
 
 - **Full Findings**: Read `FINDINGS.md` for research conclusions
-- **API Details**: See `sentry_client.py` for API documentation
-- **Analysis Logic**: Check `replay_analyzer.py` for processing details
+- **API Details**: See `src/sentry-client.ts` for API documentation
+- **Analysis Logic**: Check `src/replay-analyzer.ts` for processing details
 - **Sentry Docs**: https://docs.sentry.io/product/session-replay/
 - **Playwright Docs**: https://playwright.dev/
+- **TypeScript Docs**: https://www.typescriptlang.org/
 
 ## Contributing
 

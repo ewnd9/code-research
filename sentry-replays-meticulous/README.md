@@ -32,20 +32,25 @@ By leveraging Sentry's existing replay infrastructure, we can build a simplified
 4. Compares visual/functional outcomes
 5. Detects regressions without manual test writing
 
-## Approach
+## Implementation
 
-### Phase 1: Data Access
-- Build Sentry API client to fetch replays
-- Understand replay data format
-- Extract actionable events (clicks, inputs, navigations)
+This project is implemented in **TypeScript** with:
+- **Sentry API Client** (`src/sentry-client.ts`) - Fetches replay data via REST API
+- **Replay Analyzer** (`src/replay-analyzer.ts`) - Parses sessions and generates tests
+- **Example Workflow** (`src/example.ts`) - End-to-end demonstration
 
-### Phase 2: Replay Engine
-- Parse Sentry replay events
-- Build DOM event dispatcher
-- Implement network request mocking
-- Capture screenshots during replay
+### Phase 1: Data Access ✅
+- ✓ Built Sentry API client to fetch replays
+- ✓ Understand replay data format
+- ⚠️ Extract actionable events (needs rrweb parsing)
 
-### Phase 3: Comparison
+### Phase 2: Replay Engine (In Progress)
+- ⚠️ Parse Sentry replay events (rrweb format)
+- ✓ Build Playwright test generator
+- ⚠️ Implement network request mocking
+- ✓ Capture screenshots during replay
+
+### Phase 3: Comparison (Planned)
 - Store baseline snapshots
 - Compare new vs. baseline
 - Detect visual differences

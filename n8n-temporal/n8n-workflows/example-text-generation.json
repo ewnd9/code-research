@@ -1,0 +1,47 @@
+{
+  "name": "Example: AI Text Generation with Temporal",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "contentType": "text",
+        "prompt": "Write a short poem about workflow automation and AI working together",
+        "textModel": "gpt-4o-mini",
+        "temperature": 0.7
+      },
+      "id": "temporal-content-gen",
+      "name": "Temporal Content Generation",
+      "type": "n8n-nodes-temporal.temporalContentGeneration",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "credentials": {
+        "temporalApi": {
+          "id": "1",
+          "name": "Temporal API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Temporal Content Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null
+}

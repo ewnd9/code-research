@@ -1,0 +1,34 @@
+{
+  "name": "n8n-temporal-interop",
+  "version": "1.0.0",
+  "description": "Research project for n8n to Temporal workflows interoperability",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "worker": "bun run src/worker.ts",
+    "client": "bun run src/client.ts",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
+  },
+  "dependencies": {
+    "@temporalio/client": "^1.11.3",
+    "@temporalio/worker": "^1.11.3",
+    "@temporalio/workflow": "^1.11.3",
+    "@temporalio/activity": "^1.11.3",
+    "@fal-ai/serverless-client": "^0.14.3",
+    "openai": "^4.77.3",
+    "axios": "^1.7.9",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.7.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,1 +1,29 @@
-node_modules
+# Dependencies
+node_modules/
+bun.lockb
+
+# Environment variables
+.env
+
+# Build outputs
+dist/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker volumes
+temporal-dynamicconfig/
+
+# Test coverage
+coverage/
+
+# Temporal local data
+.temporal/

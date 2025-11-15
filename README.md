@@ -40,6 +40,39 @@ See the [project README](./sentry-replays-meticulous/README.md) for details.
 
 ---
 
+### [rrweb-to-playwright](./rrweb-to-playwright/)
+**Research Question:** Can we convert rrweb session recordings into executable Playwright tests for automated regression testing?
+
+**Status:** ✅ Proof-of-Concept Complete
+
+**Key Findings:**
+- rrweb format is well-structured and parseable
+- Conversion to Playwright tests is viable with caveats
+- Main challenge: mapping node IDs to stable CSS selectors
+- Selector stability is critical (requires data-testid)
+- Best for: smoke tests, visual regression, bug reproduction
+- Not ideal for: complex flows without network mocking
+
+**Components:**
+- rrweb event parser with node mapping
+- Intelligent selector generation (data-testid priority)
+- Playwright test code generator
+- Interactive demo HTML page for recording
+- TypeScript type definitions for rrweb events
+
+**Quick Start:**
+```bash
+cd rrweb-to-playwright
+bun install
+open demo.html  # Record a session
+bun run src/generator.ts recordings/your-session.json
+bun test:playwright generated-tests/your-session.spec.ts
+```
+
+See the [project README](./rrweb-to-playwright/README.md) and comprehensive [FINDINGS](./rrweb-to-playwright/FINDINGS.md) for details.
+
+---
+
 ## About This Repository
 
 This repository demonstrates the "async code research" pattern:

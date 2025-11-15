@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rrweb Recording Demo</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+    }
+    .controls {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 30px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    button.danger {
+      background: #dc3545;
+    }
+    button.danger:hover {
+      background: #c82333;
+    }
+    button.success {
+      background: #28a745;
+    }
+    button.success:hover {
+      background: #218838;
+    }
+    .status {
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .status.recording {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    .status.idle {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .checkbox-group {
+      margin-bottom: 20px;
+    }
+    .checkbox-group label {
+      display: inline;
+      font-weight: normal;
+      margin-left: 5px;
+    }
+    input[type="checkbox"] {
+      margin-right: 5px;
+    }
+    .demo-section {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 5px;
+    }
+    .demo-section h3 {
+      margin-top: 0;
+      color: #333;
+    }
+    .event-info {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+    }
+    .download-link {
+      display: none;
+      margin-top: 15px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-size: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 rrweb Recording Demo</h1>
+    <p class="subtitle">Record your interactions to generate Playwright tests</p>
+
+    <div id="status" class="status idle">
+      Status: Ready to record
+    </div>
+
+    <div class="controls">
+      <button id="startBtn" onclick="startRecording()">Start Recording</button>
+      <button id="stopBtn" onclick="stopRecording()" disabled>Stop Recording</button>
+      <button id="downloadBtn" onclick="downloadRecording()" class="success" disabled>Download Recording</button>
+      <button onclick="clearForm()" class="danger">Clear Form</button>
+      <div class="event-info" id="eventInfo">Events captured: 0</div>
+    </div>
+
+    <form id="demoForm">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" data-testid="name-input">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="your.email@example.com" data-testid="email-input">
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Type your message here..." data-testid="message-input"></textarea>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="newsletter" name="newsletter" data-testid="newsletter-checkbox">
+        <label for="newsletter">Subscribe to newsletter</label>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="terms" name="terms" data-testid="terms-checkbox">
+        <label for="terms">I agree to the terms and conditions</label>
+      </div>
+
+      <button type="submit" data-testid="submit-button">Submit Form</button>
+    </form>
+
+    <div class="demo-section">
+      <h3>Interactive Elements</h3>
+      <button onclick="showAlert()">Show Alert</button>
+      <button onclick="addItem()">Add List Item</button>
+      <button onclick="toggleVisibility()">Toggle Box</button>
+      <div id="toggleBox" style="display:none; margin-top:10px; padding:10px; background:#e7f3ff; border-radius:5px;">
+        This box can be toggled!
+      </div>
+      <ul id="itemList" style="margin-top:10px;"></ul>
+    </div>
+
+    <div id="recordingOutput" style="display:none; margin-top:20px;">
+      <h3>Recording Data Preview</h3>
+      <pre id="recordingData"></pre>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.js"></script>
+  <script>
+    let events = [];
+    let stopFn = null;
+    let eventCount = 0;
+
+    function startRecording() {
+      events = [];
+      eventCount = 0;
+
+      stopFn = rrweb.record({
+        emit(event) {
+          events.push(event);
+          eventCount++;
+          updateEventInfo();
+        },
+        recordCanvas: true,
+        collectFonts: true,
+      });
+
+      document.getElementById('status').className = 'status recording';
+      document.getElementById('status').textContent = '🔴 Recording in progress...';
+      document.getElementById('startBtn').disabled = true;
+      document.getElementById('stopBtn').disabled = false;
+      document.getElementById('downloadBtn').disabled = true;
+
+      console.log('Recording started');
+    }
+
+    function stopRecording() {
+      if (stopFn) {
+        stopFn();
+        stopFn = null;
+      }
+
+      document.getElementById('status').className = 'status idle';
+      document.getElementById('status').textContent = `✅ Recording stopped (${eventCount} events captured)`;
+      document.getElementById('startBtn').disabled = false;
+      document.getElementById('stopBtn').disabled = true;
+      document.getElementById('downloadBtn').disabled = false;
+
+      // Show preview
+      const output = document.getElementById('recordingOutput');
+      const dataEl = document.getElementById('recordingData');
+      output.style.display = 'block';
+      dataEl.textContent = JSON.stringify(events, null, 2);
+
+      console.log('Recording stopped. Events captured:', events.length);
+      console.log('Events:', events);
+    }
+
+    function updateEventInfo() {
+      document.getElementById('eventInfo').textContent = `Events captured: ${eventCount}`;
+    }
+
+    function downloadRecording() {
+      const dataStr = JSON.stringify(events, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `rrweb-recording-${Date.now()}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function clearForm() {
+      document.getElementById('demoForm').reset();
+    }
+
+    function showAlert() {
+      alert('This is a demo alert!');
+    }
+
+    let itemCounter = 0;
+    function addItem() {
+      itemCounter++;
+      const li = document.createElement('li');
+      li.textContent = `Item ${itemCounter}`;
+      document.getElementById('itemList').appendChild(li);
+    }
+
+    function toggleVisibility() {
+      const box = document.getElementById('toggleBox');
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+
+    document.getElementById('demoForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Form submitted! (Demo mode - no actual submission)');
+    });
+  </script>
+</body>
+</html>

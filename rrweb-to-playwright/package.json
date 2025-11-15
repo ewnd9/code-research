@@ -1,0 +1,34 @@
+{
+  "name": "rrweb-to-playwright",
+  "version": "0.1.0",
+  "description": "Convert rrweb session recordings into Playwright tests",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "parse": "bun run src/parser.ts",
+    "generate": "bun run src/generator.ts",
+    "serve": "bun run src/server.ts",
+    "test:playwright": "bunx playwright test",
+    "clean": "rm -rf dist generated-tests recordings"
+  },
+  "keywords": [
+    "rrweb",
+    "playwright",
+    "testing",
+    "session-replay",
+    "e2e",
+    "test-generation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "rrweb": "^2.0.0",
+    "rrweb-player": "^2.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.10.0",
+    "bun-types": "latest"
+  }
+}

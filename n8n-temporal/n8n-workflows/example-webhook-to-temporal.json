@@ -1,0 +1,76 @@
+{
+  "name": "Example: Webhook → Temporal → Response",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-content",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "generate-content"
+    },
+    {
+      "parameters": {
+        "contentType": "={{ $json.body.type }}",
+        "prompt": "={{ $json.body.prompt }}",
+        "textModel": "gpt-4o-mini",
+        "imageModel": "fal-ai/flux/schnell",
+        "timeout": 120
+      },
+      "id": "temporal-gen",
+      "name": "Temporal Content Generation",
+      "type": "n8n-nodes-temporal.temporalContentGeneration",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "credentials": {
+        "temporalApi": {
+          "id": "1",
+          "name": "Temporal API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "id": "respond-to-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Temporal Content Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Temporal Content Generation": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null
+}

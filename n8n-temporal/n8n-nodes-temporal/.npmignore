@@ -1,0 +1,7 @@
+**/*.ts
+!dist/**/*.d.ts
+tsconfig.json
+tslint.json
+gulpfile.js
+credentials/
+nodes/

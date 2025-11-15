@@ -1,0 +1,24 @@
+FROM n8nio/n8n:latest
+
+USER root
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++ git
+
+USER node
+
+# Create custom nodes directory
+RUN mkdir -p /home/node/.n8n/custom
+
+# Copy custom nodes package
+COPY --chown=node:node n8n-nodes-temporal /home/node/.n8n/custom/n8n-nodes-temporal
+
+# Install and build custom nodes
+WORKDIR /home/node/.n8n/custom/n8n-nodes-temporal
+RUN npm install && npm run build
+
+# Back to n8n directory
+WORKDIR /home/node
+
+# Start n8n
+CMD ["n8n"]

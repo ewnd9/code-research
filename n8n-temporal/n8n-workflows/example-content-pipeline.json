@@ -1,0 +1,96 @@
+{
+  "name": "Example: Full Content Pipeline (Story → Image → Video)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "schedule-trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "parameters": {
+        "initialPrompt": "A peaceful morning in a futuristic smart city where AI and humans collaborate",
+        "timeout": 600,
+        "options": {
+          "imageModel": "fal-ai/flux/schnell",
+          "videoModel": "fal-ai/kling-video/v1.5/standard/text-to-video",
+          "videoDuration": 5
+        }
+      },
+      "id": "temporal-pipeline",
+      "name": "Temporal Content Pipeline",
+      "type": "n8n-nodes-temporal.temporalContentPipeline",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "credentials": {
+        "temporalApi": {
+          "id": "1",
+          "name": "Temporal API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "fileId": {
+          "__rl": true,
+          "value": "your-google-sheet-id",
+          "mode": "list",
+          "cachedResultName": "Content Log"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "date": "={{ $now }}",
+            "story": "={{ $json.story }}",
+            "imageUrl": "={{ $json.image.url }}",
+            "videoUrl": "={{ $json.video.url }}"
+          }
+        }
+      },
+      "id": "google-sheets",
+      "name": "Log to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Temporal Content Pipeline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Temporal Content Pipeline": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null
+}

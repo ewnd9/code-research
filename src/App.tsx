@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { PagesList } from './components/admin/PagesList';
 import { PageBuilder } from './components/admin/PageBuilder';
+import { PageView } from './pages/PageView';
 
 export const App: React.FC = () => {
   return (
@@ -12,8 +13,11 @@ export const App: React.FC = () => {
         <Route path="/admin/pages/new" element={<PageBuilder />} />
         <Route path="/admin/pages/:slug" element={<PageBuilder />} />
 
-        {/* Redirect to admin by default */}
-        <Route path="*" element={<Navigate to="/admin" replace />} />
+        {/* Public Pages */}
+        <Route path="/:slug" element={<PageView />} />
+
+        {/* Default redirect */}
+        <Route path="/" element={<Navigate to="/admin" replace />} />
       </Routes>
     </BrowserRouter>
   );

@@ -11,11 +11,6 @@ export default defineConfig({
         target: 'http://localhost:3002',
         changeOrigin: true,
       },
-      // Proxy SSR requests for public pages (except admin routes)
-      '^/(?!admin|src|@|node_modules).*': {
-        target: 'http://localhost:3002',
-        changeOrigin: true,
-      },
     },
   },
   build: {

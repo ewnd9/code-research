@@ -1,7 +1,5 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
-import { renderToReadableStream } from 'react-dom/server';
-import { PageViewServer } from '../pages/PageViewServer';
 import {
   getPages,
   getPageBySlug,
@@ -387,83 +385,14 @@ app.get('/api/openapi.json', (c) => {
 // Swagger UI
 app.get('/api/docs', swaggerUI({ url: '/api/openapi.json' }));
 
-// Static files for production (serve built Vite assets)
-const isProduction = process.env.NODE_ENV === 'production';
-
-if (isProduction) {
-  // Serve static files from dist directory
-  const serveStatic = async (c: any) => {
-    const path = c.req.path;
-    const filePath = `./dist${path === '/' ? '/index.html' : path}`;
-
-    try {
-      const file = Bun.file(filePath);
-      if (await file.exists()) {
-        return new Response(file);
-      }
-    } catch (error) {
-      // File doesn't exist, continue to next handler
-    }
-    return c.notFound();
-  };
-
-  // Serve admin static files
-  app.get('/admin*', serveStatic);
-  app.get('/assets/*', serveStatic);
-  app.get('/src/*', serveStatic);
-}
-
-// SSR Routes for public pages
-app.get('/:slug', async (c) => {
-  try {
-    const slug = c.req.param('slug');
-
-    // Skip API routes
-    if (slug === 'api') {
-      return c.notFound();
-    }
-
-    // In development, redirect admin to Vite dev server
-    if (slug === 'admin' && !isProduction) {
-      return c.redirect('http://localhost:3000/admin');
-    }
-
-    const stream = await renderToReadableStream(<PageViewServer slug={slug} />, {
-      bootstrapScripts: [],
-    });
-
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Transfer-Encoding': 'chunked',
-      },
-    });
-  } catch (error) {
-    console.error('SSR Error:', error);
-    return c.text('Error rendering page', 500);
-  }
-});
-
-// Root redirect
-app.get('/', (c) => {
-  if (isProduction) {
-    // In production, serve the built admin app
-    return c.redirect('/admin');
-  } else {
-    // In development, redirect to Vite dev server
-    return c.redirect('http://localhost:3000/admin');
-  }
-});
-
 // Start server
 const server = Bun.serve({
   port: 3002,
   fetch: app.fetch,
 });
 
-console.log(`Unified Hono server (API + SSR) running at http://localhost:${server.port}`);
-console.log(`- Public pages (SSR): http://localhost:${server.port}/:slug`);
+console.log(`Hono API server running at http://localhost:${server.port}`);
 console.log(`- API: http://localhost:${server.port}/api/*`);
 console.log(`- API Docs (Swagger): http://localhost:${server.port}/api/docs`);
 console.log(`- OpenAPI JSON: http://localhost:${server.port}/api/openapi.json`);
-console.log(`- Admin: http://localhost:3000/admin (Vite dev server)`);
+console.log(`- SPA: http://localhost:3000 (Vite dev server)`);

@@ -11,8 +11,13 @@ interface BlockWithData extends Omit<Block, 'data'> {
   data: any;
 }
 
-export const PageBuilder: React.FC = () => {
-  const { slug } = useParams<{ slug?: string }>();
+interface PageBuilderProps {
+  slug?: string;
+}
+
+export const PageBuilder: React.FC<PageBuilderProps> = ({ slug: slugProp }) => {
+  const params = useParams<{ slug?: string }>();
+  const slug = slugProp || params.slug;
   const navigate = useNavigate();
   const [page, setPage] = useState<PageWithBlocks | null>(null);
   const [blocks, setBlocks] = useState<BlockWithData[]>([]);

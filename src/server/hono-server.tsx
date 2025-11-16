@@ -385,14 +385,19 @@ app.get('/api/openapi.json', (c) => {
 // Swagger UI
 app.get('/api/docs', swaggerUI({ url: '/api/openapi.json' }));
 
-// Start server
-const server = Bun.serve({
-  port: 3002,
-  fetch: app.fetch,
-});
+// Export the app for use in RSC server
+export { app };
 
-console.log(`Hono API server running at http://localhost:${server.port}`);
-console.log(`- API: http://localhost:${server.port}/api/*`);
-console.log(`- API Docs (Swagger): http://localhost:${server.port}/api/docs`);
-console.log(`- OpenAPI JSON: http://localhost:${server.port}/api/openapi.json`);
-console.log(`- SPA: http://localhost:3000 (Vite dev server)`);
+// Start server only if this file is run directly
+if (import.meta.main) {
+  const server = Bun.serve({
+    port: 3002,
+    fetch: app.fetch,
+  });
+
+  console.log(`Hono API server running at http://localhost:${server.port}`);
+  console.log(`- API: http://localhost:${server.port}/api/*`);
+  console.log(`- API Docs (Swagger): http://localhost:${server.port}/api/docs`);
+  console.log(`- OpenAPI JSON: http://localhost:${server.port}/api/openapi.json`);
+  console.log(`- SPA: http://localhost:3000 (Vite dev server)`);
+}

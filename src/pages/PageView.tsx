@@ -5,8 +5,13 @@ import { useParams } from 'react-router-dom';
 import { BlockRenderer } from '../components/blocks';
 import type { PageWithBlocks } from '../lib/db';
 
-export const PageView: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>();
+interface PageViewProps {
+  slug?: string;
+}
+
+export const PageView: React.FC<PageViewProps> = ({ slug: slugProp }) => {
+  const params = useParams<{ slug?: string }>();
+  const slug = slugProp || params.slug || '';
   const [page, setPage] = useState<PageWithBlocks | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');

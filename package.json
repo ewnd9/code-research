@@ -7,8 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "server": "bun run src/server/hono-server.tsx",
-    "start": "bun run --bun src/server/hono-server.tsx & bun run dev"
+    "server": "bun run src/server/rsc-server.tsx",
+    "server:api": "bun run src/server/hono-server.tsx",
+    "start": "bun run --bun src/server/rsc-server.tsx"
   },
   "devDependencies": {
     "@types/bun": "latest",

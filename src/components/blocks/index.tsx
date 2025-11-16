@@ -1,12 +1,12 @@
 import React from 'react';
-import { Jumbotron, type JumbotronData } from './jumbotron';
-import { jumbotronSchema, jumbotronDefaultData } from './jumbotron/schema';
-import { CallToAction, type CallToActionData } from './call-to-action';
-import { callToActionSchema, callToActionDefaultData } from './call-to-action/schema';
-import { SeoListing, type SeoListingData } from './seo-listing';
-import { seoListingSchema, seoListingDefaultData } from './seo-listing/schema';
-import { Gallery, type GalleryData } from './gallery';
-import { gallerySchema, galleryDefaultData } from './gallery/schema';
+import { Jumbotron, type JumbotronData } from './jumbotron/jumbotron';
+import { jumbotronSchema, jumbotronDefaultData } from './jumbotron/jumbotron-schema';
+import { CallToAction, type CallToActionData } from './call-to-action/call-to-action';
+import { callToActionSchema, callToActionDefaultData } from './call-to-action/call-to-action-schema';
+import { SeoListing, type SeoListingData } from './seo-listing/seo-listing';
+import { seoListingSchema, seoListingDefaultData } from './seo-listing/seo-listing-schema';
+import { Gallery, type GalleryData } from './gallery/gallery';
+import { gallerySchema, galleryDefaultData } from './gallery/gallery-schema';
 
 export type BlockType = 'jumbotron' | 'cta' | 'seo-listing' | 'gallery';
 

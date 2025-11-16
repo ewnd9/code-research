@@ -5,11 +5,20 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
+    proxy: {
+      // Proxy API requests to Hono server
+      '/api': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+      },
+      // Proxy SSR requests for public pages (except admin routes)
+      '^/(?!admin|src|@|node_modules).*': {
+        target: 'http://localhost:3002',
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: 'dist',
-  },
-  optimizeDeps: {
-    exclude: ['better-sqlite3'],
   },
 })

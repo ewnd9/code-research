@@ -3,13 +3,18 @@ import { swaggerUI } from '@hono/swagger-ui';
 import { renderToReadableStream } from 'react-dom/server';
 import { PageViewServer } from '../pages/PageViewServer';
 import {
-  handleGetPages,
-  handleGetPage,
-  handleCreatePage,
-  handleUpdatePage,
-  handleDeletePage,
-  handleUpdatePageBlocks,
-} from './api';
+  getPages,
+  getPageBySlug,
+  createPage,
+  updatePage,
+  deletePage,
+  createBlock,
+  deleteAllBlocksForPage,
+  type Page,
+  type InsertPage,
+  type InsertBlock,
+  type PageWithBlocks,
+} from '../lib/db';
 import {
   PageSchema,
   CreatePageSchema,
@@ -19,6 +24,84 @@ import {
   ApiSuccessSchema,
   ApiErrorSchema,
 } from './schemas';
+
+// API Response type
+interface ApiResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
+// API Handlers
+const handleGetPages = (): ApiResponse<Page[]> => {
+  try {
+    const pages = getPages();
+    return { success: true, data: pages };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
+const handleGetPage = (slug: string): ApiResponse<PageWithBlocks> => {
+  try {
+    const page = getPageBySlug(slug);
+    if (!page) {
+      return { success: false, error: 'Page not found' };
+    }
+    return { success: true, data: page };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
+const handleCreatePage = (page: InsertPage): ApiResponse<{ id: number }> => {
+  try {
+    const id = createPage(page);
+    return { success: true, data: { id } };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
+const handleUpdatePage = (id: number, page: Partial<InsertPage>): ApiResponse => {
+  try {
+    updatePage(id, page);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
+const handleDeletePage = (id: number): ApiResponse => {
+  try {
+    deletePage(id);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+};
+
+const handleUpdatePageBlocks = (
+  pageId: number,
+  blocks: Omit<InsertBlock, 'id' | 'page_id' | 'created_at'>[]
+): ApiResponse => {
+  try {
+    // Delete all existing blocks for the page
+    deleteAllBlocksForPage(pageId);
+
+    // Create new blocks
+    blocks.forEach((block) => {
+      createBlock({
+        ...block,
+        page_id: pageId,
+      });
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+};
 
 // Create Hono app with OpenAPI
 const app = new OpenAPIHono();
@@ -304,13 +387,44 @@ app.get('/api/openapi.json', (c) => {
 // Swagger UI
 app.get('/api/docs', swaggerUI({ url: '/api/openapi.json' }));
 
+// Static files for production (serve built Vite assets)
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction) {
+  // Serve static files from dist directory
+  const serveStatic = async (c: any) => {
+    const path = c.req.path;
+    const filePath = `./dist${path === '/' ? '/index.html' : path}`;
+
+    try {
+      const file = Bun.file(filePath);
+      if (await file.exists()) {
+        return new Response(file);
+      }
+    } catch (error) {
+      // File doesn't exist, continue to next handler
+    }
+    return c.notFound();
+  };
+
+  // Serve admin static files
+  app.get('/admin*', serveStatic);
+  app.get('/assets/*', serveStatic);
+  app.get('/src/*', serveStatic);
+}
+
 // SSR Routes for public pages
 app.get('/:slug', async (c) => {
   try {
     const slug = c.req.param('slug');
 
-    // Skip API routes and docs
-    if (slug === 'api' || slug === 'admin') {
+    // Skip API routes
+    if (slug === 'api') {
+      return c.notFound();
+    }
+
+    // In development, redirect admin to Vite dev server
+    if (slug === 'admin' && !isProduction) {
       return c.redirect('http://localhost:3000/admin');
     }
 
@@ -332,7 +446,13 @@ app.get('/:slug', async (c) => {
 
 // Root redirect
 app.get('/', (c) => {
-  return c.redirect('http://localhost:3000/admin');
+  if (isProduction) {
+    // In production, serve the built admin app
+    return c.redirect('/admin');
+  } else {
+    // In development, redirect to Vite dev server
+    return c.redirect('http://localhost:3000/admin');
+  }
 });
 
 // Start server

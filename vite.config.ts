@@ -1,19 +1,42 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import rsc from '@vitejs/plugin-rsc';
 
 export default defineConfig({
-  plugins: [react()],
-  server: {
-    port: 3000,
-    proxy: {
-      // Proxy API requests to Hono server
-      '/api': {
-        target: 'http://localhost:3002',
-        changeOrigin: true,
+  plugins: [
+    react(),
+    rsc({
+      entries: {
+        rsc: './src/entry.rsc.tsx',
+        ssr: './src/entry.ssr.tsx',
+        client: './src/entry.browser.tsx',
+      },
+    }),
+  ],
+  environments: {
+    rsc: {
+      build: {
+        outDir: 'dist/rsc',
+        rollupOptions: {
+          input: { index: './src/entry.rsc.tsx' },
+        },
+      },
+    },
+    ssr: {
+      build: {
+        outDir: 'dist/ssr',
+        rollupOptions: {
+          input: { index: './src/entry.ssr.tsx' },
+        },
+      },
+    },
+    client: {
+      build: {
+        outDir: 'dist/client',
+        rollupOptions: {
+          input: { index: './src/entry.browser.tsx' },
+        },
       },
     },
   },
-  build: {
-    outDir: 'dist',
-  },
-})
+});

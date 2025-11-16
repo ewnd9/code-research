@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "bun run src/server/index.ts",
-    "start": "bun run --bun src/server/index.ts & bun run dev"
+    "server:rsc": "bun run src/server/unified.tsx",
+    "start": "bun run --bun src/server/unified.tsx & bun run dev",
+    "start:old": "bun run --bun src/server/index.ts & bun run dev"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",

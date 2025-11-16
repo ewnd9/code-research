@@ -30,7 +30,7 @@ export const PageBuilder: React.FC = () => {
 
   const loadPage = async (pageSlug: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/pages/${pageSlug}`);
+      const response = await fetch(`http://localhost:3002/api/pages/${pageSlug}`);
       const result = await response.json();
       if (result.success && result.data) {
         setPage(result.data);
@@ -94,7 +94,7 @@ export const PageBuilder: React.FC = () => {
       let pageId = page?.id;
 
       if (!pageId) {
-        const response = await fetch('http://localhost:3001/api/pages', {
+        const response = await fetch('http://localhost:3002/api/pages', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -107,7 +107,7 @@ export const PageBuilder: React.FC = () => {
         if (!result.success) throw new Error(result.error);
         pageId = result.data.id;
       } else {
-        const response = await fetch(`http://localhost:3001/api/pages/${pageId}`, {
+        const response = await fetch(`http://localhost:3002/api/pages/${pageId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -121,7 +121,7 @@ export const PageBuilder: React.FC = () => {
       }
 
       // Update blocks
-      const response = await fetch(`http://localhost:3001/api/pages/${pageId}/blocks`, {
+      const response = await fetch(`http://localhost:3002/api/pages/${pageId}/blocks`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(

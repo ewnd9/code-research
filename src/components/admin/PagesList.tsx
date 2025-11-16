@@ -13,7 +13,7 @@ export const PagesList: React.FC = () => {
 
   const loadPages = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/pages');
+      const response = await fetch('http://localhost:3002/api/pages');
       const result = await response.json();
       if (result.success) {
         setPages(result.data);
@@ -32,7 +32,7 @@ export const PagesList: React.FC = () => {
     if (!confirm('Are you sure you want to delete this page?')) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/api/pages/${id}`, {
+      const response = await fetch(`http://localhost:3002/api/pages/${id}`, {
         method: 'DELETE'
       });
       const result = await response.json();

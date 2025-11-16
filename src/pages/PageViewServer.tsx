@@ -1,9 +1,10 @@
 import React from 'react';
-import { getPageBySlug, type PageWithBlocks } from '../lib/db';
-import { BlockRendererServer } from '../components/blocks/server/BlockRendererServer';
-import type { BlockType } from '../components/blocks';
+import { getPageBySlug } from '../lib/db';
+import { BlockRenderer, type BlockType } from '../components/blocks';
 
+// Async Server Component - renders pages server-side
 export async function PageViewServer({ slug }: { slug: string }) {
+  // Fetch data directly from the database (server-side only)
   const page = getPageBySlug(slug);
 
   if (!page) {
@@ -30,8 +31,9 @@ export async function PageViewServer({ slug }: { slug: string }) {
       </head>
       <body>
         <div className="min-h-screen">
+          {/* Using the universal BlockRenderer - works in server context */}
           {page.blocks.map((block, index) => (
-            <BlockRendererServer
+            <BlockRenderer
               key={index}
               type={block.type as BlockType}
               data={block.data}

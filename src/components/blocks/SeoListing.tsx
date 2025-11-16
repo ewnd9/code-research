@@ -71,7 +71,8 @@ export const seoListingSchema = {
   }
 };
 
-export const SeoListing: React.FC<{ data: SeoListingData }> = ({ data }) => {
+// Server Component - can be rendered on server or client
+export function SeoListing({ data }: { data: SeoListingData }) {
   return (
     <div className="py-16 px-4 bg-gray-50">
       <div className="max-w-6xl mx-auto">
@@ -111,4 +112,4 @@ export const SeoListing: React.FC<{ data: SeoListingData }> = ({ data }) => {
       </div>
     </div>
   );
-};
+}

@@ -39,7 +39,8 @@ export const jumbotronSchema = {
   }
 };
 
-export const Jumbotron: React.FC<{ data: JumbotronData }> = ({ data }) => {
+// Server Component - can be rendered on server or client
+export function Jumbotron({ data }: { data: JumbotronData }) {
   return (
     <div
       className="relative bg-cover bg-center py-32 px-4"
@@ -63,4 +64,4 @@ export const Jumbotron: React.FC<{ data: JumbotronData }> = ({ data }) => {
       </div>
     </div>
   );
-};
+}

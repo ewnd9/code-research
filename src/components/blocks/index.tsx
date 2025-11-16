@@ -97,11 +97,12 @@ export const blockRegistry: Record<BlockType, BlockConfig> = {
   }
 };
 
-export const BlockRenderer: React.FC<{ type: BlockType; data: any }> = ({ type, data }) => {
+// Universal BlockRenderer - works in both server and client contexts
+export function BlockRenderer({ type, data }: { type: BlockType; data: any }) {
   const config = blockRegistry[type];
   if (!config) {
     return <div>Unknown block type: {type}</div>;
   }
   const Component = config.component;
   return <Component data={data} />;
-};
+}

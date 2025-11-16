@@ -1,4 +1,5 @@
 import React from 'react';
+import { GalleryImage as GalleryImageClient } from '../client/GalleryImage';
 
 export interface GalleryImage {
   url: string;
@@ -85,7 +86,8 @@ export const gallerySchema = {
   }
 };
 
-export const Gallery: React.FC<{ data: GalleryData }> = ({ data }) => {
+// Server Component - can be rendered on server or client
+export function Gallery({ data }: { data: GalleryData }) {
   const columns = data.columns || 3;
   const gridClass = {
     2: 'md:grid-cols-2',
@@ -101,24 +103,15 @@ export const Gallery: React.FC<{ data: GalleryData }> = ({ data }) => {
         </h2>
         <div className={`grid grid-cols-1 ${gridClass} gap-6`}>
           {data.images.map((image, index) => (
-            <div
+            <GalleryImageClient
               key={index}
-              className="group relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition"
-            >
-              <img
-                src={image.url}
-                alt={image.alt}
-                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
-              />
-              {image.caption && (
-                <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-3 transform translate-y-full group-hover:translate-y-0 transition-transform">
-                  <p className="text-sm">{image.caption}</p>
-                </div>
-              )}
-            </div>
+              url={image.url}
+              alt={image.alt}
+              caption={image.caption}
+            />
           ))}
         </div>
       </div>
     </div>
   );
-};
+}

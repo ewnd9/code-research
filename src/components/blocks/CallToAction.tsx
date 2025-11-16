@@ -47,7 +47,8 @@ export const callToActionSchema = {
   }
 };
 
-export const CallToAction: React.FC<{ data: CallToActionData }> = ({ data }) => {
+// Server Component - can be rendered on server or client
+export function CallToAction({ data }: { data: CallToActionData }) {
   return (
     <div
       className="py-16 px-4"
@@ -68,4 +69,4 @@ export const CallToAction: React.FC<{ data: CallToActionData }> = ({ data }) => 
       </div>
     </div>
   );
-};
+}

@@ -7,10 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "server": "bun run src/server/index.ts",
-    "server:rsc": "bun run src/server/unified.tsx",
-    "start": "bun run --bun src/server/unified.tsx & bun run dev",
-    "start:old": "bun run --bun src/server/index.ts & bun run dev"
+    "server": "bun run src/server/hono-server.tsx",
+    "server:old": "bun run src/server/unified.tsx",
+    "start": "bun run --bun src/server/hono-server.tsx & bun run dev"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
@@ -28,13 +27,17 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@hono/swagger-ui": "^0.5.2",
+    "@hono/zod-openapi": "^1.1.4",
     "@rjsf/core": "^6.1.1",
     "@rjsf/utils": "^6.1.1",
     "@rjsf/validator-ajv8": "^6.1.1",
     "@tanstack/react-router": "^1.136.6",
     "better-sqlite3": "^12.4.1",
+    "hono": "^4.10.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.9.6"
+    "react-router-dom": "^7.9.6",
+    "zod": "^4.1.12"
   }
 }
